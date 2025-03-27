@@ -1,0 +1,178 @@
+﻿<html lang="fr">
+  <head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>BNP PARIBAS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+      .session-info {
+        transition: all 0.3s ease;
+      }
+      .session-info:hover {
+        background-color: #f3f4f6;
+        cursor: pointer;
+        transform: scale(1.05);
+      }
+      .btn {
+        transition: background-color 0.3s ease;
+      }
+      .btn:hover {
+        background-color: #3b82f6;
+      }
+      .envelope {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        background-color: #f1f1f1;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .envelope i {
+        font-size: 20px;
+        color: #0073e6;
+      }
+    </style>
+  </head>
+  <body class="bg-green-100">
+    <header class="bg-green-700 text-white p-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <img alt="BNP PARIBAS" class="mr-2" height="50" src="logobn.jpg" width="50"/>
+        <span class="text-xl font-bold">BNP PARIBAS</span>
+      </div>
+      <nav class="flex space-x-4">
+        <a class="hover:underline" href="#">Banque Laurentienne</a>
+        <a class="hover:underline" href="#">Contactez-nous</a>
+        <a class="hover:underline" href="#">Localisateur</a>
+        <a class="hover:underline" href="#">Déconnexion</a>
+      </nav>
+    </header>
+    <div class="bg-yellow-500 text-white p-2 flex justify-center space-x-4">
+      <a class="hover:underline" href="#" onclick="showVirements()">MES COMPTES</a>
+      <a class="hover:underline" href="#">PAIEMENTS DE FACTURES</a>
+      <a class="hover:underline" href="#" onclick="showVirements()">VIREMENTS</a>
+      <a class="hover:underline" href="#">DEMANDES</a>
+      <a class="hover:underline" href="#">MESSAGES</a>
+      <a class="hover:underline" href="#">MON PROFIL</a>
+    </div>
+    <div class="flex flex-col md:flex-row p-4">
+      <aside class="bg-white p-4 shadow-md w-full md:w-1/4">
+        <div class="mb-4">
+          <p class="font-bold">Bienvenue, <span class="font-normal">DANIEL LEBON</span></p>
+          <div class="session-info p-3 mt-2 mb-4 rounded-lg" id="session-info">
+            <p class="text-sm" id="session-date">Dernière session: 27/03/2025 14:12:11</p>
+          </div>
+        </div>
+        <div class="border-t border-yellow-500 mt-4 pt-4">
+          <h2 class="font-bold mb-2">VIREMENTS</h2>
+          <ul class="space-y-2">
+            <li><a class="hover:underline" href="#" onclick="showVirements()">Virements</a></li>
+            <li><a class="hover:underline" href="#" onclick="showVirementsProgrammés()">Virements programmés</a></li>
+            <li><a class="hover:underline" href="#">Lier mon compte externe</a></li>
+            <li><a class="hover:underline" href="#">Envoi de virement</a></li>
+            <li><a class="hover:underline" href="#">Mes destinataires</a></li>
+          </ul>
+        </div>
+        <div class="mt-4">
+          <button class="btn bg-blue-700 text-white px-4 py-2 rounded-full w-full" onclick="processVirement()">Afficher les virements</button>
+        </div>
+      </aside>
+      <main class="bg-white p-6 shadow-md w-full md:w-3/4 mt-4 md:mt-0 md:ml-4" id="main-content">
+        <h1 class="bg-green-600 text-black p-2 font-bold">CRÉER LE PROFIL D'EXPÉDITEUR</h1>
+        <form id="virementForm" class="space-y-4 mt-4">
+          <div>
+            <label class="block font-bold" for="nom">Nom complet</label>
+            <input class="w-full border border-gray-300 p-2" id="nom" type="text" required/>
+          </div>
+          <div>
+            <label class="block font-bold" for="courriel">Adresse courriel</label>
+            <input class="w-full border border-gray-300 p-2" id="courriel" type="email" required/>
+          </div>
+          <div>
+            <label class="block font-bold" for="mobile">Numéro de mobile</label>
+            <input class="w-full border border-gray-300 p-2" id="mobile" type="text" required/>
+          </div>
+          <div>
+            <label class="block font-bold" for="montant">Montant du virement</label>
+            <input class="w-full border border-gray-300 p-2" id="montant" type="number" required/>
+          </div>
+          <div>
+            <label class="block font-bold" for="destinataire">Destinataire</label>
+            <input class="w-full border border-gray-300 p-2" id="destinataire" type="text" required/>
+          </div>
+          <div>
+            <label class="block font-bold" for="message">Message (optionnel)</label>
+            <textarea class="w-full border border-gray-300 p-2" id="message"></textarea>
+          </div>
+          <button type="button" class="bg-blue-700 text-white px-4 py-2 rounded-full w-full" onclick="submitVirement()">Confirmer le virement</button>
+        </form>
+        <p class="text-gray-500 mt-4">MD Marque déposée BNP PARIBAS Inc. Utilisée sous licence.</p>
+      </main>
+    </div>
+    <div id="envelope-container" class="absolute top-4 right-4">
+      <div class="envelope" onclick="openConfirmation()">
+        <i class="fas fa-envelope"></i>
+      </div>
+    </div>
+    <script>
+      // Fonction pour actualiser l'heure et la date
+      function updateDateTime() {
+        const now = new Date();
+        const formattedDate = now.toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+        document.getElementById('session-date').textContent = `Dernière session: ${formattedDate}`;
+      }
+      setInterval(updateDateTime, 1000);  // Actualisation toutes les secondes
+
+      // Tableau pour stocker les virements effectués
+      const virements = [];
+
+      // Fonction pour afficher les virements
+      function showVirements() {
+        let content = '<h2>Virements effectués</h2><ul>';
+        virements.forEach(virement => {
+          content += `<li>${virement.date} - ${virement.montant}€ vers ${virement.destinataire} (${virement.courriel})</li>`;
+        });
+        content += '</ul>';
+        document.getElementById('main-content').innerHTML = content;
+      }
+
+      // Fonction pour simuler un virement
+      function submitVirement() {
+        const nom = document.getElementById('nom').value;
+        const courriel = document.getElementById('courriel').value;
+        const mobile = document.getElementById('mobile').value;
+        const montant = document.getElementById('montant').value;
+        const destinataire = document.getElementById('destinataire').value;
+        const message = document.getElementById('message').value;
+        const date = new Date().toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' });
+
+        // Ajouter les informations du virement dans le tableau
+        virements.push({ nom, courriel, mobile, montant, destinataire, message, date });
+
+        // Mettre à jour l'affichage des virements
+        showVirements();
+
+        // Simuler un message de confirmation
+        alert('Virement effectué avec succès');
+
+        // Envoi du message de confirmation vers la page messagerie
+        sendMessage('Virement en attente', `Virement de ${montant}€ vers ${destinataire}`);
+      }
+
+      // Fonction pour envoyer un message
+      function sendMessage(subject, content) {
+        const message = { subject, content };
+        // Logique pour ajouter le message à la page messagerie (simplifiée)
+        console.log('Message envoyé:', message);
+      }
+
+      // Ouvrir la confirmation du virement dans la page messagerie
+      function openConfirmation() {
+        window.location.href = 'messagerie.html';
+      }
+    </script>
+  </body>
+</html>

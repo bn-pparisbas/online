@@ -1,0 +1,72 @@
+﻿<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Messagerie - Banque Laurentienne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-green-100">
+    <header class="bg-green-700 text-white p-4 flex justify-between items-center">
+        <div class="flex items-center">
+            <img alt="BNP PARIBAS" class="mr-2" height="50" src="logobn.jpg" width="50"/>
+            <span class="text-xl font-bold">
+                BNP PARIBAS
+            </span>
+        </div>
+        <nav class="flex space-x-4">
+            <a class="hover:underline" href="#">Banque Laurentienne</a>
+            <a class="hover:underline" href="#">Contactez-nous</a>
+            <a class="hover:underline" href="#">Localisateur</a>
+            <a class="hover:underline" href="#">Déconnexion</a>
+        </nav>
+    </header>
+
+    <!-- Menu de navigation -->
+    <div class="bg-yellow-500 text-white p-2 flex justify-center space-x-4">
+        <a class="hover:underline" href="#">MES COMPTES</a>
+        <a class="hover:underline" href="#">PAIEMENTS DE FACTURES</a>
+        <a class="hover:underline" href="#">VIREMENTS</a>
+        <a class="hover:underline" href="#">DEMANDES</a>
+        <a class="hover:underline" href="#">MESSAGES</a>
+        <a class="hover:underline" href="#">MON PROFIL</a>
+    </div>
+
+    <div class="flex flex-col p-4">
+        <h1 class="bg-green-600 text-black p-2 font-bold">
+            Messagerie
+        </h1>
+        <div class="bg-white p-6 shadow-md mt-4">
+            <h2 class="font-bold">Messages Récents</h2>
+            <ul id="messagesList" class="space-y-4 mt-4">
+                <!-- Messages seront injectés ici -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Pour afficher les messages dans la page de messagerie
+        function loadMessages() {
+            fetch('/api/messages') // Appel à l'API pour obtenir les messages
+                .then(response => response.json())
+                .then(data => {
+                    const messagesList = document.getElementById('messagesList');
+                    messagesList.innerHTML = ''; // Efface les messages existants
+                    data.forEach(message => {
+                        const li = document.createElement('li');
+                        li.className = 'border-b p-2';
+                        li.innerHTML = `
+                            <strong>${message.subject}</strong><br>
+                            ${message.body}<br>
+                            <span class="text-gray-500">${message.date}</span>
+                        `;
+                        messagesList.appendChild(li);
+                    });
+                });
+        }
+
+        // Charger les messages lors du chargement de la page
+        document.addEventListener('DOMContentLoaded', loadMessages);
+    </script>
+</body>
+</html>
