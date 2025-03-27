@@ -100,12 +100,72 @@
         .history-item:last-child {
             border-bottom: none;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .flex {
+                flex-direction: column;
+            }
+
+            .w-1/4 {
+                width: 100%;
+            }
+
+            .w-3/4 {
+                width: 100%;
+            }
+
+            .sidebar-item {
+                text-align: center;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header .space-x-4 {
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .dynamic-data {
+                font-size: 1.5rem;
+            }
+
+            .history-section {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header .text-xl {
+                font-size: 1.25rem;
+            }
+
+            .history-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .history-item p {
+                font-size: 0.9rem;
+            }
+
+            .amount {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 fade-in">
         <!-- Header -->
-        <div class="bg-white shadow-md p-4 flex justify-between items-center section">
+        <div class="bg-white shadow-md p-4 flex justify-between items-center section header">
             <div class="flex items-center">
                 <img src="logobn.jpg" alt="BNP Paribas logo" class="mr-4" width="50" height="50">
                 <div>
@@ -117,7 +177,6 @@
                 <i class="fas fa-search text-gray-600 icon-hover"></i>
                 <i class="fas fa-file-alt text-gray-600 icon-hover"></i>
                 <div class="relative">
-                    <!-- Enveloppe devenue un bouton cliquable -->
                     <a href="messagerie.html" class="flex items-center justify-center p-2 rounded-full bg-gray-100 hover:bg-green-500 transition">
                         <i class="fas fa-envelope text-gray-600 icon-hover"></i>
                         <span class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-1">3</span>
@@ -132,7 +191,7 @@
         <!-- Main Content -->
         <div class="flex mt-4">
             <!-- Sidebar -->
-            <div class="w-1/4 bg-gray-800 text-white p-4 space-y-4">
+            <div class="w-1/4 bg-gray-800 text-white p-4 space-y-4 sidebar">
                 <div class="flex items-center space-x-2 sidebar-item p-2 rounded micro-interaction">
                     <i class="fas fa-wallet"></i>
                     <span>MES COMPTES & CONTRATS</span>
