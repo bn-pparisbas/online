@@ -18,7 +18,7 @@
             <a class="hover:underline" href="#">Banque Laurentienne</a>
             <a class="hover:underline" href="#">Contactez-nous</a>
             <a class="hover:underline" href="#">Localisateur</a>
-            <a class="hover:underline" href="#">Déconnexion</a>
+            <a class="hover:underline" href="#" onclick="logout()">Déconnexion</a> <!-- Lien Déconnexion -->
         </nav>
     </header>
 
@@ -67,6 +67,12 @@
 
         // Charger les messages lors du chargement de la page
         document.addEventListener('DOMContentLoaded', loadMessages);
+
+        // Fonction de déconnexion
+        function logout() {
+            // Rediriger vers la page de connexion
+            window.location.href = 'login.html';
+        }
     </script>
 </body>
 </html>

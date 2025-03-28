@@ -20,20 +20,48 @@
       .btn:hover {
         background-color: #3b82f6;
       }
-      .envelope {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        background-color: #f1f1f1;
-        border-radius: 50%;
-        cursor: pointer;
-        display: flex;
+      /* Style de la barre de chargement flottante */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
         justify-content: center;
         align-items: center;
+        z-index: 9999;
       }
-      .envelope i {
-        font-size: 20px;
-        color: #0073e6;
+      .loading-message {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+      }
+      .loading-spinner {
+        margin: 20px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 2s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      /* Formulaire amélioré */
+      input, textarea, button {
+        border-radius: 12px;
+        transition: all 0.3s ease;
+      }
+      input:focus, textarea:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.6);
       }
     </style>
   </head>
@@ -47,7 +75,7 @@
         <a class="hover:underline" href="#">Banque Laurentienne</a>
         <a class="hover:underline" href="#">Contactez-nous</a>
         <a class="hover:underline" href="#">Localisateur</a>
-        <a class="hover:underline" href="#">Déconnexion</a>
+        <a class="hover:underline" href="#" onclick="logout()">Déconnexion</a> <!-- Lien Déconnexion -->
       </nav>
     </header>
     <div class="bg-yellow-500 text-white p-2 flex justify-center space-x-4">
@@ -61,7 +89,7 @@
     <div class="flex flex-col md:flex-row p-4">
       <aside class="bg-white p-4 shadow-md w-full md:w-1/4">
         <div class="mb-4">
-          <p class="font-bold">Bienvenue, <span class="font-normal">DANIEL LEBON</span></p>
+          <p class="font-bold">Bienvenue, <span class="font-normal">DANIEL LEON</span></p>
           <div class="session-info p-3 mt-2 mb-4 rounded-lg" id="session-info">
             <p class="text-sm" id="session-date">Dernière session: 27/03/2025 14:12:11</p>
           </div>
@@ -85,38 +113,42 @@
         <form id="virementForm" class="space-y-4 mt-4">
           <div>
             <label class="block font-bold" for="nom">Nom complet</label>
-            <input class="w-full border border-gray-300 p-2" id="nom" type="text" required/>
+            <input class="w-full border border-gray-300 p-3" id="nom" type="text" required/>
           </div>
           <div>
-            <label class="block font-bold" for="courriel">Adresse courriel</label>
-            <input class="w-full border border-gray-300 p-2" id="courriel" type="email" required/>
+            <label class="block font-bold" for="courriel">IBAN</label>
+            <input class="w-full border border-gray-300 p-3" id="courriel" type="email" required/>
           </div>
           <div>
-            <label class="block font-bold" for="mobile">Numéro de mobile</label>
-            <input class="w-full border border-gray-300 p-2" id="mobile" type="text" required/>
+            <label class="block font-bold" for="mobile">BIC</label>
+            <input class="w-full border border-gray-300 p-3" id="mobile" type="text" required/>
           </div>
           <div>
             <label class="block font-bold" for="montant">Montant du virement</label>
-            <input class="w-full border border-gray-300 p-2" id="montant" type="number" required/>
+            <input class="w-full border border-gray-300 p-3" id="montant" type="number" required/>
           </div>
           <div>
-            <label class="block font-bold" for="destinataire">Destinataire</label>
-            <input class="w-full border border-gray-300 p-2" id="destinataire" type="text" required/>
+            <label class="block font-bold" for="destinataire">CODE BANQUE</label>
+            <input class="w-full border border-gray-300 p-3" id="destinataire" type="text" required/>
           </div>
           <div>
             <label class="block font-bold" for="message">Message (optionnel)</label>
-            <textarea class="w-full border border-gray-300 p-2" id="message"></textarea>
+            <textarea class="w-full border border-gray-300 p-3" id="message"></textarea>
           </div>
           <button type="button" class="bg-blue-700 text-white px-4 py-2 rounded-full w-full" onclick="submitVirement()">Confirmer le virement</button>
         </form>
         <p class="text-gray-500 mt-4">MD Marque déposée BNP PARIBAS Inc. Utilisée sous licence.</p>
       </main>
     </div>
-    <div id="envelope-container" class="absolute top-4 right-4">
-      <div class="envelope" onclick="openConfirmation()">
-        <i class="fas fa-envelope"></i>
+    
+    <!-- Overlay de chargement -->
+    <div id="loading-overlay" class="loading-overlay">
+      <div class="loading-message">
+        <p>Virement en cours...</p>
+        <div class="loading-spinner"></div>
       </div>
     </div>
+
     <script>
       // Fonction pour actualiser l'heure et la date
       function updateDateTime() {
@@ -125,9 +157,6 @@
         document.getElementById('session-date').textContent = `Dernière session: ${formattedDate}`;
       }
       setInterval(updateDateTime, 1000);  // Actualisation toutes les secondes
-
-      // Tableau pour stocker les virements effectués
-      const virements = [];
 
       // Fonction pour afficher les virements
       function showVirements() {
@@ -152,27 +181,40 @@
         // Ajouter les informations du virement dans le tableau
         virements.push({ nom, courriel, mobile, montant, destinataire, message, date });
 
-        // Mettre à jour l'affichage des virements
-        showVirements();
+        // Afficher la barre de chargement
+        document.getElementById('loading-overlay').style.display = 'flex';
 
-        // Simuler un message de confirmation
-        alert('Virement effectué avec succès');
+        // Simuler un délai de chargement
+        setTimeout(() => {
+          // Mettre à jour l'affichage des virements
+          showVirements();
+          
+          // Masquer la barre de chargement
+          document.getElementById('loading-overlay').style.display = 'none';
 
-        // Envoi du message de confirmation vers la page messagerie
-        sendMessage('Virement en attente', `Virement de ${montant}€ vers ${destinataire}`);
+          // Simuler un message de confirmation
+          alert('Virement effectué avec succès');
+          
+          // Envoi du message de confirmation vers la page messagerie
+          sendMessage('Virement en attente', `Virement de ${montant}€ vers ${destinataire}`);
+        }, 3000);  // 3 secondes de chargement
       }
 
       // Fonction pour envoyer un message
       function sendMessage(subject, content) {
-        const message = { subject, content };
-        // Logique pour ajouter le message à la page messagerie (simplifiée)
-        console.log('Message envoyé:', message);
+        const message = { subject, content, date: new Date().toLocaleString() };
+        messages.push(message);
       }
 
-      // Ouvrir la confirmation du virement dans la page messagerie
-      function openConfirmation() {
-        window.location.href = 'messagerie.html';
+      // Fonction de déconnexion
+      function logout() {
+        // Effectuer la déconnexion et rediriger vers login.html
+        window.location.href = "login.html";
       }
+
+      // Tableau pour stocker les virements
+      let virements = [];
+      let messages = [];
     </script>
   </body>
 </html>

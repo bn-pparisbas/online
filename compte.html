@@ -7,10 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-        .sidebar-item:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-        }
+        /* Animation et micro-interactions */
         .icon-hover:hover {
             color: #34D399;
         }
@@ -18,8 +15,7 @@
             background-color: #34D399 !important;
             color: white !important;
         }
-
-        /* Animations */
+        /* Animations et effets de transition */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -27,13 +23,9 @@
         .fade-in {
             animation: fadeIn 1s ease-in-out;
         }
-
-        /* Transition fluide entre sections */
         .section {
             transition: all 0.3s ease-in-out;
         }
-
-        /* Animation de chargement */
         .loading {
             position: absolute;
             top: 50%;
@@ -43,14 +35,10 @@
             color: #34D399;
             display: none;
         }
-
-        /* Micro-interactions */
         .micro-interaction:hover {
             transform: scale(1.05);
             transition: transform 0.2s ease-in-out;
         }
-
-        /* Animations de sécurité */
         .sensitive-action {
             transition: background-color 0.3s, color 0.3s;
         }
@@ -58,104 +46,78 @@
             background-color: #e3342f;
             color: white;
         }
-
-        /* Visualisation dynamique */
-        .dynamic-data {
-            transition: transform 0.3s ease;
-        }
-
         /* Effet de survol pour les montants */
         .amount:hover {
             transform: scale(1.05);
             transition: transform 0.3s ease-in-out;
             cursor: pointer;
         }
-
-        /* Effet de survol pour l'historique */
         .history-item:hover {
             background-color: rgba(52, 211, 153, 0.2);
             transform: translateX(10px);
             cursor: pointer;
         }
-
-        /* Animation historique */
         .history-item {
             transition: transform 0.3s ease, background-color 0.3s ease;
         }
-
         .history-section {
             background-color: #f9fafb;
             padding: 16px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .history-item {
             display: flex;
             justify-content: space-between;
             padding: 12px;
             border-bottom: 1px solid #e5e7eb;
         }
-
         .history-item:last-child {
             border-bottom: none;
         }
-
         /* Responsive Design */
         @media (max-width: 768px) {
             .flex {
                 flex-direction: column;
             }
-
             .w-1/4 {
                 width: 100%;
             }
-
             .w-3/4 {
                 width: 100%;
             }
-
             .sidebar-item {
                 text-align: center;
             }
-
             .sidebar {
                 width: 100%;
             }
-
             .header {
                 flex-direction: column;
                 text-align: center;
             }
-
             .header .space-x-4 {
                 justify-content: center;
                 margin-top: 10px;
             }
-
             .dynamic-data {
                 font-size: 1.5rem;
             }
-
             .history-section {
                 padding: 8px;
             }
         }
-
         @media (max-width: 480px) {
             .header .text-xl {
                 font-size: 1.25rem;
             }
-
             .history-item {
                 flex-direction: column;
                 text-align: center;
             }
-
             .history-item p {
                 font-size: 0.9rem;
             }
-
             .amount {
                 font-size: 1.2rem;
             }
@@ -184,7 +146,8 @@
                 </div>
                 <i class="fas fa-user text-gray-600 icon-hover"></i>
                 <span class="text-gray-600">M. DANIEL LEON</span>
-                <i class="fas fa-power-off text-gray-600 icon-hover sensitive-action"></i>
+                <!-- Bouton de déconnexion -->
+                <a href="login.html" class="fas fa-power-off text-gray-600 icon-hover sensitive-action" title="Déconnexion"></a>
             </div>
         </div>
 
@@ -202,11 +165,11 @@
                 </div>
                 <div class="flex items-center space-x-2 sidebar-item p-2 rounded micro-interaction">
                     <i class="fas fa-chart-line"></i>
-                    <span>SUIVRE MON BUDGET</span>
+                    <a href="budget.html" class="text-white hover:text-green-400">SUIVRE MON BUDGET</a>
                 </div>
                 <div class="flex items-center space-x-2 sidebar-item p-2 rounded micro-interaction">
                     <i class="fas fa-briefcase"></i>
-                    <span>PORTEFEUILLE & BOURSE</span>
+                    <a href="bourses.html" class="text-white hover:text-green-400">PORTEFEUILLE & BOURSE</a>
                 </div>
             </div>
 
@@ -215,8 +178,8 @@
                 <!-- Tabs -->
                 <div class="flex space-x-4 mb-4">
                     <button class="bg-green-500 text-white px-4 py-2 rounded button-active">MES COMPTES</button>
-                    <button class="bg-gray-200 text-gray-600 px-4 py-2 rounded">MES CARTES</button>
-                    <button class="bg-gray-200 text-gray-600 px-4 py-2 rounded">MES ASSURANCES</button>
+                    <a href="mescartes.html"><button class="bg-gray-200 text-gray-600 px-4 py-2 rounded">MES CARTES</button></a>
+                    <a href="assurances.html"><button class="bg-gray-200 text-gray-600 px-4 py-2 rounded">MES ASSURANCES</button></a>
                 </div>
 
                 <!-- Welcome Section -->
@@ -253,67 +216,42 @@
                 </div>
 
                 <!-- Search and Filter -->
-                <div class="flex justify-between items-center my-4">
-                    <input type="text" placeholder="Recherche" class="border p-2 rounded w-1/3">
-                    <select class="border p-2 rounded">
-                        <option>Trier par compte</option>
-                    </select>
-                    <select class="border p-2 rounded">
-                        <option>Choix du titulaire</option>
-                    </select>
+                <div class="flex justify-between items-center mt-8">
+                    <div class="flex items-center">
+                        <input type="text" class="px-4 py-2 border rounded-lg" placeholder="Rechercher un compte...">
+                    </div>
+                    <div>
+                        <button class="px-4 py-2 bg-green-500 text-white rounded-lg">Ajouter un compte</button>
+                    </div>
                 </div>
 
-                <!-- Account Details -->
-                <div class="history-section">
-                    <h4 class="text-xl font-bold mb-2">HISTORIQUE</h4>
-                    <div class="history-item" id="history-item-1">
-                        <p>À venir </p>
-                        <p class="amount">2.304,00 €</p>
-                    </div>
-                    <div class="history-item" id="history-item-2">
-                        <p>Virement reçu </p>
-                        <p class="amount">1.804,00 €</p>
-                    </div>
-                    <div class="history-item" id="history-item-3">
-                        <p>Retrait </p>
-                        <p class="amount">1.604,00 €</p>
-                    </div>
-                    <div class="history-item" id="history-item-4">
-                        <p>Virement effectué </p>
-                        <p class="amount">604,00 €</p>
+                <!-- Account History -->
+                <div class="mt-6">
+                    <div class="history-section">
+                        <h3 class="text-xl font-bold">Historique des transactions</h3>
+                        <div class="history-item">
+                            <p>Virement <span class="text-sm text-gray-500">02/03/2025</span></p>
+                            <p class="text-green-500">+ 350.00 €</p>
+                        </div>
+                        <div class="history-item">
+                            <p>Retrait <span class="text-sm text-gray-500">01/03/2025</span></p>
+                            <p class="text-red-500">- 100.00 €</p>
+                        </div>
+                        <div class="history-item">
+                            <p>Paiement <span class="text-sm text-gray-500">28/02/2025</span></p>
+                            <p class="text-red-500">- 50.00 €</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div class="loading" id="loading">
-        Chargement en cours...
-    </div>
-
     <script>
-        // Mise à jour de la date et de l'heure
-        function updateDateTime() {
-            const dateNow = new Date();
-            document.getElementById('date-now').innerText = dateNow.toLocaleDateString();
-            document.getElementById('last-login').innerText = dateNow.toLocaleTimeString();
-        }
-        setInterval(updateDateTime, 1000);
-
-        // Fonction pour charger le solde depuis localStorage
-        function loadBalance() {
-            const balance = localStorage.getItem('balance');
-            if (balance) {
-                document.getElementById('balance').innerText = `${balance} €`;
-            }
-        }
-
-        // Simuler un temps de chargement
-        window.onload = () => {
-            document.getElementById('loading').style.display = 'none';
-            document.querySelector('.fade-in').style.animation = 'fadeIn 1s ease-in-out';
-            loadBalance();
-        };
+        // Exemple de données dynamiques
+        const currentDate = new Date();
+        const lastLogin = new Date(currentDate.getTime() - 1000000000); // Dernière connexion il y a 1 jour
+        document.getElementById('date-now').textContent = currentDate.toLocaleDateString();
+        document.getElementById('last-login').textContent = lastLogin.toLocaleString();
     </script>
 </body>
 </html>
